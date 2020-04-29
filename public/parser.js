@@ -8,6 +8,7 @@ function mapData() {
     this.numLayers = 0;
     this.tiles = [];
     this.mapData = [];
+    this.layers = [];
 
     this.parse = function (data) {
         if (this.loaded) {
@@ -82,6 +83,42 @@ function mapData() {
 
         }
 
+        let size = 30;
+        let h = this.numTiles / size;
+        let layer = createImage(this.tileWidth*size,this.tileHeight*h);
+        
+        layer.loadPixels();
+  
+
+        let xTile = 0,yTile = 0;
+        for(let i = 0;i<this.numTiles;i++)
+        {
+            let curTile = this.tiles[i];
+
+
+
+            for(let y = 0;y<this.tileHeight;y++)
+            {
+                for(let x = 0;x<this.tileWidth;x++)
+                {
+                    let srcIdx = x * 4 + y * 4 * this.tileWidth;
+                    layer.set(xTile * this.tileWidth+x,yTile * this.tileHeight+y,color(curTile[srcIdx],curTile[srcIdx+1],curTile[srcIdx+2]));
+                }
+            }
+
+            xTile++;
+            if(xTile>=layer.width/this.tileWidth)
+            {
+                xTile = 0;
+                yTile++;
+                if(yTile>=layer.height/this.tileHeight)
+                    break;
+            }
+        }
+
+        layer.updatePixels();
+
+        this.layers.push(layer);
 
         console.log("Parsed")
         this.loaded = true;

@@ -1,6 +1,6 @@
 
 let dfMapData = new mapData();
-
+let origPixDensity = 1;
 
 
 function preload() {
@@ -24,10 +24,46 @@ function setup() {
     background(0);
     textFont('Helvetica', 15);
     textAlign(CENTER, CENTER);
+    origPixDensity = pixelDensity();
     pixelDensity(1);
 }
 
+//GLOBALS
 let dragged = false;
+let imageX = 0;
+let imageY = 0;
+let clickX = 0;
+let clickY = 0;
+let selectedX = 10;
+let selectedY = 10;
+let scale = 2;
+let jump = 1.1;
+
+function mouseWheel(evt) {
+    if (event.delta > 0) {
+        scale /=jump;
+        if (scale < 0.25)
+            scale = 0.25;
+    } else {
+        scale *=jump;
+        if (scale > 5)
+            scale = 5;
+    }
+}
+
+function mousePressed() {
+    clickX = mouseX;
+    clickY = mouseY;
+}
+
+function mouseDragged() {
+    let xDif = (mouseX - clickX);
+    let yDif = (mouseY - clickY);
+    clickX = mouseX;
+    clickY = mouseY;
+    imageX += xDif;
+    imageY += yDif;
+}
 
 
 function draw() {
@@ -35,37 +71,50 @@ function draw() {
         // background(255, 0, 0);
         // return;
 
-        textFont('Helvetica', 15);
+
         background(0);
+        let img = dfMapData.layers[0];
+        image(img, imageX, imageY, img.width * scale, img.height * scale);
 
-        loadPixels();
+        let selectorWidth = dfMapData.tileWidth * scale;
+        let selectorHeight = dfMapData.tileHeight * scale;
 
+        stroke(255, 255, 0);
+        strokeWeight(3)
+        noFill();
+        rect(imageX + selectorWidth * selectedX, imageY + selectorHeight * selectedY, selectorWidth, selectorHeight);
 
-        let xT = 0, yT = 0;
-        let wPixels = dfMapData.tileWidth;
-        let hPixels = dfMapData.tileHeight;
-        for (let i = 0; i < dfMapData.numTiles; i++) {
+        /* loadPixels();
+ 
+ 
+       let xT = 0, yT = 0;
+         let wPixels = dfMapData.tileWidth;
+         let hPixels = dfMapData.tileHeight;
+         for (let i = 0; i < dfMapData.numTiles; i++) {
+ 
+             let cols = dfMapData.tiles[i];
+             for (let y = 0; y < hPixels; y++) {
+                 for (let x = 0; x < wPixels; x++) {
+                     let idx = x * 4 + y * 4 * wPixels;
+                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
+                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
+                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
+                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
+                 }
+             }
+             xT++;
+             if (xT >= width / wPixels) {
+                 xT = 0;
+                 yT++;
+                 if (yT >= height / hPixels)
+                     break;
+             }
+         }
+         updatePixels();*/
 
-            let cols = dfMapData.tiles[i];
-            for (let y = 0; y < hPixels; y++) {
-                for (let x = 0; x < wPixels; x++) {
-                    let idx = x * 4 + y * 4 * wPixels;
-                    pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
-                    pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
-                    pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
-                    pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
-                }
-            }
-            xT++;
-            if (xT >= width / wPixels) {
-                xT = 0;
-                yT++;
-                if (yT >= height / hPixels)
-                    break;
-            }
-        }
-        updatePixels();
-
+    } else {
+        textFont('Helvetica', 20);
+        text("Loading...", width / 2, height / 2);
     }
     if (dragged) {
         fill(0, 0, 0, 200);
@@ -94,7 +143,7 @@ function fetchAndDecompressMapData(path) {
             return res;
         });
 
-        
+
 }
 
 
