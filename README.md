@@ -17,7 +17,7 @@
 
 ### Running Server
 
-The server is an extemely simple Node.js server
+The server is an extemrely simple Node.js server
 with express framework.
 
 Basically all it does is server static files.
