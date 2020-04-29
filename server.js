@@ -1,14 +1,16 @@
 
 const express = require('express');
-
+const path = require('path')
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname+'/public')));
 
 app.get('/',(req,res)=>{
-    res.sendFile('index.html');
+    res.sendFile(path.join(__dirname+'/public/index.html'));
 })
 
-const server = app.listen(80,function(){
-    console.log("Server up on 80");
+const port = process.env.port || 3000;
+
+const server = app.listen(port,function(){
+    console.log("Server up on "+port);
 });
