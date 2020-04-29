@@ -5,6 +5,10 @@ const app = express();
 
 app.use(express.static('public'));
 
-const server = app.listen(80,function(){
+app.get('/',(req,res)=>{
+    res.sendFile('index.html');
+})
 
+const server = app.listen(80,function(){
+    console.log("Server up on 80");
 });
