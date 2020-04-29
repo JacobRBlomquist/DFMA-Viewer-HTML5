@@ -84,7 +84,8 @@ function mapData() {
         }
 
         let size = 30;
-        let h = this.numTiles / size;
+        let h = ceil(this.numTiles / size);
+        console.log("H: "+h)
         let layer = createImage(this.tileWidth*size,this.tileHeight*h);
         
         layer.loadPixels();

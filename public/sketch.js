@@ -32,24 +32,119 @@ function setup() {
 let dragged = false;
 let imageX = 0;
 let imageY = 0;
+let originalImgHeight = 0;
+let originalImgWidth = 0;
+let imgWidth = 0;
+let imgHeight = 0;
 let clickX = 0;
 let clickY = 0;
 let selectedX = 10;
 let selectedY = 10;
-let scale = 2;
-let jump = 1.1;
+let scale = 1;
+let jump = 1.05;
 
-function mouseWheel(evt) {
-    if (event.delta > 0) {
-        scale /=jump;
-        if (scale < 0.25)
-            scale = 0.25;
-    } else {
-        scale *=jump;
-        if (scale > 5)
-            scale = 5;
+function zoom() {
+    let zoomed = false;
+    //ZOOM
+
+
+    if (key == '=' || key == '+') {
+        scale *= jump;
+        if (scale > 6)
+            scale = 6;
+
+        zoomed = true;
+    }
+
+    if (key == "-") {
+        scale /= jump;
+        if (scale < 0.15)
+            scale = 0.15;
+
+        zoomed = true;
+    }
+
+
+    //center zoom
+    if (zoomed) {
+        let curCenterX = width / 2 - imageX;
+        let curCenterY = height / 2 - imageY;
+
+        let ratioX = curCenterX / imgWidth;
+        let ratioY = curCenterY / imgHeight;
+
+        imgWidth = originalImgWidth * scale;
+        imgHeight = originalImgHeight * scale;
+
+        imageX = width / 2 - imgWidth * ratioX;
+        imageY = height / 2 - imgHeight * ratioY;
     }
 }
+
+// function keyPressed() {
+//     let zoomed = false;
+//     //ZOOM
+
+
+//     if (key == '=' || key == '+') {
+//         scale *= jump;
+//         if (scale > 6)
+//             scale = 6;
+
+//         zoomed = true;
+//     }
+
+//     if (key == "-") {
+//         scale /= jump;
+//         if (scale < 0.15)
+//             scale = 0.15;
+
+//         zoomed = true;
+//     }
+
+
+//     //center zoom
+//     if (zoomed) {
+//         let curCenterX = width / 2 - imageX;
+//         let curCenterY = height / 2 - imageY;
+
+//         let ratioX = curCenterX / imgWidth;
+//         let ratioY = curCenterY / imgHeight;
+
+//         imgWidth = originalImgWidth * scale;
+//         imgHeight = originalImgHeight * scale;
+
+//         imageX = width / 2 - imgWidth * ratioX;
+//         imageY = height / 2 - imgHeight * ratioY;
+//     }
+// }
+
+// function mouseWheel(evt) {
+//     if (event.delta > 0) {
+//         scale /=jump;
+//         if (scale < 0.15)
+//             scale = 0.15;
+//     } else {
+//         scale *=jump;
+//         if (scale > 6)
+//             scale = 6;
+//     }
+
+//     //center zoom
+
+//     let curCenterX = width/2 - imageX;
+//     let curCenterY = height/2 - imageY;
+
+//     let ratioX = curCenterX / imgWidth;
+//     let ratioY = curCenterY / imgHeight;
+
+//     imgWidth = originalImgWidth * scale;
+//     imgHeight = originalImgHeight * scale;
+
+//     imageX = width/2 - imgWidth * ratioX;
+//     imageY = height/2 - imgHeight * ratioY;
+
+// }
 
 function mousePressed() {
     clickX = mouseX;
@@ -68,13 +163,24 @@ function mouseDragged() {
 
 function draw() {
     if (dfMapData.loaded) {
+        if (keyIsPressed == true && (key == "=" || key == "+" || key == "-"))
+            zoom();
+
+
+
         // background(255, 0, 0);
         // return;
+        if (originalImgWidth == 0) {//not loaded
+            originalImgWidth = dfMapData.layers[0].width;
+            originalImgHeight = dfMapData.layers[0].height;
+            imgWidth = originalImgWidth * scale;
+            imgHeight = originalImgHeight * scale;
+        }
 
 
         background(0);
         let img = dfMapData.layers[0];
-        image(img, imageX, imageY, img.width * scale, img.height * scale);
+        image(img, imageX, imageY, imgWidth, imgHeight);
 
         let selectorWidth = dfMapData.tileWidth * scale;
         let selectorHeight = dfMapData.tileHeight * scale;
