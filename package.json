@@ -1,0 +1,33 @@
+{
+  "name": "dfma_viewer",
+  "version": "0.1.0",
+  "description": "A viewer for DFMA FDF-MAP files in HTML5 Canvas",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacobRBlomquist/DFMA.js.git"
+  },
+  "keywords": [
+    "DFMA",
+    "Dwarf",
+    "Fortress",
+    "Map",
+    "Archive",
+    "FDF-MAP"
+  ],
+  "author": "Jacob R. Blomquist",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JacobRBlomquist/DFMA.js/issues"
+  },
+  "homepage": "https://github.com/JacobRBlomquist/DFMA.js#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
