@@ -27,10 +27,19 @@ function mapData() {
         this.numLayers = data.getInt32(ptr, true);
         ptr += 4;
 
-        if (this.version != -1) {
+        if (this.version < -3) {
             console.log("UNSUPPORTED FDF-MAP FILE FORMAT - Version: " + this.version + " IS INVALID OR NOT IMPLEMENTED YET");
             return;
         }
+
+        let flags = -1 - this.version;
+        let RLE = false;
+        let TID = false;
+
+        if (flags & 1)
+            TID = true;
+        if (flags & 2)
+            RLE = true;
 
         //get map data
         for (let i = 0; i < this.numLayers; i++) {
@@ -43,10 +52,17 @@ function mapData() {
             this.mapData.push({ depth: curDepth, width: curWidth, height: curHeight, index: i });
         }
 
+
+
         for (let curTileIdx = 0; curTileIdx < this.numTiles; curTileIdx++) {
             let numPixels = this.tileWidth * this.tileHeight;
             let processed = 0;
             let pixelData = [];
+
+            //throw away tile information for nowp5.BandPass()
+            if (TID)
+                ptr += 3;
+
             while (processed < numPixels)//P5 needs RGBA
             {
                 let num = data.getUint8(ptr++, true);
@@ -54,7 +70,7 @@ function mapData() {
                 let g = data.getUint8(ptr++, true);
                 let r = data.getUint8(ptr++, true);
                 for (let i = num; i > 0; i--) {
-                  
+
                     pixelData.push(r);//RED
                     pixelData.push(g);//GREEN
                     pixelData.push(b);//BLUE
