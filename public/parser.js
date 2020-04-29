@@ -1,3 +1,4 @@
+"use strict";
 
 function mapData() {
     this.loaded = false;

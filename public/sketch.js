@@ -1,3 +1,4 @@
+"use strict";
 
 let dfMapData = new mapData();
 let origPixDensity = 1;
@@ -43,122 +44,6 @@ let selectedY = 10;
 let scale = 1;
 let jump = 1.05;
 
-function zoom() {
-    let zoomed = false;
-    //ZOOM
-
-
-    if (key == '=' || key == '+') {
-        scale *= jump;
-        if (scale > 6)
-            scale = 6;
-
-        zoomed = true;
-    }
-
-    if (key == "-") {
-        scale /= jump;
-        if (scale < 0.15)
-            scale = 0.15;
-
-        zoomed = true;
-    }
-
-
-    //center zoom
-    if (zoomed) {
-        let curCenterX = width / 2 - imageX;
-        let curCenterY = height / 2 - imageY;
-
-        let ratioX = curCenterX / imgWidth;
-        let ratioY = curCenterY / imgHeight;
-
-        imgWidth = originalImgWidth * scale;
-        imgHeight = originalImgHeight * scale;
-
-        imageX = width / 2 - imgWidth * ratioX;
-        imageY = height / 2 - imgHeight * ratioY;
-    }
-}
-
-// function keyPressed() {
-//     let zoomed = false;
-//     //ZOOM
-
-
-//     if (key == '=' || key == '+') {
-//         scale *= jump;
-//         if (scale > 6)
-//             scale = 6;
-
-//         zoomed = true;
-//     }
-
-//     if (key == "-") {
-//         scale /= jump;
-//         if (scale < 0.15)
-//             scale = 0.15;
-
-//         zoomed = true;
-//     }
-
-
-//     //center zoom
-//     if (zoomed) {
-//         let curCenterX = width / 2 - imageX;
-//         let curCenterY = height / 2 - imageY;
-
-//         let ratioX = curCenterX / imgWidth;
-//         let ratioY = curCenterY / imgHeight;
-
-//         imgWidth = originalImgWidth * scale;
-//         imgHeight = originalImgHeight * scale;
-
-//         imageX = width / 2 - imgWidth * ratioX;
-//         imageY = height / 2 - imgHeight * ratioY;
-//     }
-// }
-
-// function mouseWheel(evt) {
-//     if (event.delta > 0) {
-//         scale /=jump;
-//         if (scale < 0.15)
-//             scale = 0.15;
-//     } else {
-//         scale *=jump;
-//         if (scale > 6)
-//             scale = 6;
-//     }
-
-//     //center zoom
-
-//     let curCenterX = width/2 - imageX;
-//     let curCenterY = height/2 - imageY;
-
-//     let ratioX = curCenterX / imgWidth;
-//     let ratioY = curCenterY / imgHeight;
-
-//     imgWidth = originalImgWidth * scale;
-//     imgHeight = originalImgHeight * scale;
-
-//     imageX = width/2 - imgWidth * ratioX;
-//     imageY = height/2 - imgHeight * ratioY;
-
-// }
-
-function mousePressed() {
-    clickX = mouseX;
-    clickY = mouseY;
-}
-
-function mouseDragged() {
-    let xDif = (mouseX - clickX);
-    let yDif = (mouseY - clickY);
-    clickX = mouseX;
-    clickY = mouseY;
-    imageX += xDif;
-    imageY += yDif;
-}
 
 
 function draw() {
@@ -175,6 +60,7 @@ function draw() {
             originalImgHeight = dfMapData.layers[0].height;
             imgWidth = originalImgWidth * scale;
             imgHeight = originalImgHeight * scale;
+            return;
         }
 
 
@@ -233,6 +119,60 @@ function draw() {
 
 }
 
+function zoom() {
+    let zoomed = false;
+    //ZOOM
+
+
+    if (key == '=' || key == '+') {
+        scale *= jump;
+        if (scale > 6)
+            scale = 6;
+
+        zoomed = true;
+    }
+
+    if (key == "-") {
+        scale /= jump;
+        if (scale < 0.15)
+            scale = 0.15;
+
+        zoomed = true;
+    }
+
+
+    //center zoom
+    if (zoomed) {
+        let curCenterX = width / 2 - imageX;
+        let curCenterY = height / 2 - imageY;
+
+        let ratioX = curCenterX / imgWidth;
+        let ratioY = curCenterY / imgHeight;
+
+        imgWidth = originalImgWidth * scale;
+        imgHeight = originalImgHeight * scale;
+
+        imageX = width / 2 - imgWidth * ratioX;
+        imageY = height / 2 - imgHeight * ratioY;
+    }
+}
+
+
+function mousePressed() {
+    clickX = mouseX;
+    clickY = mouseY;
+}
+
+function mouseDragged() {
+    let xDif = (mouseX - clickX);
+    let yDif = (mouseY - clickY);
+    clickX = mouseX;
+    clickY = mouseY;
+    imageX += xDif;
+    imageY += yDif;
+}
+
+
 
 function fetchAndDecompressMapData(path) {
 
@@ -268,6 +208,9 @@ function fileDropCB(file) {
     if (!file.name.endsWith("fdf-map")) {
         alert("Invalid File Format! You must submit an 'fdf-map' file!");
     }
+
+    originalImgWidth = 0;
+    originalImgHeight = 0;
 
     const reader = new FileReader();
     reader.onload = function () {
