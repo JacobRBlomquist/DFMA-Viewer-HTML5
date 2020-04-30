@@ -2,7 +2,8 @@
 
 let dfMapData = new mapData();
 let origPixDensity = 1;
-
+let idx = 0;
+let loading = true;
 
 function preload() {
     let fName = "file.fdf-map";
@@ -10,7 +11,8 @@ function preload() {
 
     fetchAndDecompressMapData(fName).then((e) => {
 
-        dfMapData.parse(e)
+        dfMapData.parse(e);
+        loading = false;
     });
 
 }
@@ -56,8 +58,8 @@ function draw() {
         // background(255, 0, 0);
         // return;
         if (originalImgWidth == 0) {//not loaded
-            originalImgWidth = dfMapData.layers[0].width;
-            originalImgHeight = dfMapData.layers[0].height;
+            originalImgWidth = dfMapData.mapData[0].width * dfMapData.tileWidth;
+            originalImgHeight = dfMapData.mapData[0].height * dfMapData.tileHeight;
             imgWidth = originalImgWidth * scale;
             imgHeight = originalImgHeight * scale;
             return;
@@ -65,7 +67,15 @@ function draw() {
 
 
         background(0);
-        let img = dfMapData.layers[0];
+
+
+        if (dfMapData.mapData[idx].loaded === false) {
+            loading = true;
+            dfMapData.loadLayer(idx);
+            return;
+        }
+        let img = dfMapData.mapData[idx].img;
+
         image(img, imageX, imageY, imgWidth, imgHeight);
 
         let selectorWidth = dfMapData.tileWidth * scale;
@@ -192,6 +202,18 @@ function fetchAndDecompressMapData(path) {
 
 }
 
+function keyPressed() {
+    if (key == "," || key == "<") {
+        idx++;
+        if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers }
+    }
+    if (key == "." || key == ">") {
+        idx--;
+        if (idx < 0)
+            idx = 0;
+    }
+
+}
 
 function fileHoverCB() {
 
