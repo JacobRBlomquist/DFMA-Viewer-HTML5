@@ -10,7 +10,7 @@ function preload() {
     document.getElementById('fileName').innerText = fName;
 
     fetchAndDecompressMapData(fName).then((e) => {
-
+        loading = true;
         dfMapData.parse(e);
         loading = false;
     });
@@ -49,7 +49,7 @@ let jump = 1.05;
 
 
 function draw() {
-    if (dfMapData.loaded) {
+    if (dfMapData.loaded&&!loading) {
         if (keyIsPressed == true && (key == "=" || key == "+" || key == "-"))
             zoom();
 
@@ -69,7 +69,7 @@ function draw() {
         background(0);
 
 
-        if (dfMapData.mapData[idx].loaded === false) {
+        if (dfMapData.mapData[idx]!=undefined && dfMapData.mapData[idx].loaded === false&&!dfMapData.mapData[idx].loading) {
             loading = true;
             dfMapData.loadLayer(idx);
             return;
@@ -205,7 +205,7 @@ function fetchAndDecompressMapData(path) {
 function keyPressed() {
     if (key == "," || key == "<") {
         idx++;
-        if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers }
+        if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers-1 }
     }
     if (key == "." || key == ">") {
         idx--;

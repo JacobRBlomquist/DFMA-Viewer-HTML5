@@ -9,15 +9,20 @@ function mapData() {
     this.numLayers = 0;
     this.tiles = [];
     this.mapData = [];
-    this.ptr =0;
+    this.ptr = 0;
     this.data = undefined;
 
-    this.loadLayer = function(idx)
-    {
+    this.loadLayer = function (idx) {
+        console.log("loading " + idx);
+        loading = true;
+
+
+
         if (this.mapData[idx].loaded)
             return;
 
-        let curMapData = this.mapData[0];
+        this.mapData[idx].loading = true;
+        let curMapData = this.mapData[idx];
         let imgTWidth = curMapData.width;
         let imgTHeight = curMapData.height;
 
@@ -26,6 +31,7 @@ function mapData() {
 
         let curLayer = createImage(imgWidth, imgHeight);
         curLayer.loadPixels();
+
 
         for (let y = 0; y < imgTHeight; y++) {
             let yTileIndex = y * this.tileHeight;
@@ -47,8 +53,8 @@ function mapData() {
                 //blit
                 for (let ty = 0; ty < this.tileHeight; ty++) {
                     for (let tx = 0; tx < this.tileWidth; tx++) {
-                        let srcIdx = tx * 4 + ty * 4 * this.tileWidth;
-                        curLayer.set(xTileIndex + tx, yTileIndex + ty, color(curTile[srcIdx], curTile[srcIdx + 1], curTile[srcIdx + 2]))
+                        let srcIdx = ty * 4 + tx * 4 * this.tileWidth;
+                        curLayer.set(yTileIndex + ty, xTileIndex + tx, color(curTile[srcIdx], curTile[srcIdx + 1], curTile[srcIdx + 2]))
                     }
                 }
 
@@ -61,7 +67,9 @@ function mapData() {
 
         this.mapData[idx].loaded = true;
         this.mapData[idx].img = curLayer;
-
+        loading = false;
+        this.mapData[idx].loading = false;
+        console.log("done loading " + idx);
     }
 
     this.parse = function (data) {
@@ -103,7 +111,7 @@ function mapData() {
             this.ptr += 4;
             let curHeight = data.getInt32(this.ptr, true);
             this.ptr += 4;
-            this.mapData.push({ depth: curDepth, width: curWidth, height: curHeight, index: i, loaded: false });
+            this.mapData.push({ depth: curDepth, width: curWidth, height: curHeight, index: i, loaded: false, loading: false });
         }
 
 
@@ -115,7 +123,7 @@ function mapData() {
 
             //throw away tile information for nowp5.BandPass()
             if (TID)
-            this.ptr += 3;
+                this.ptr += 3;
 
             while (processed < numPixels)//P5 needs RGBA
             {
@@ -135,6 +143,11 @@ function mapData() {
             this.tiles.push(pixelData);
 
         }
+
+
+
+
+
 
         this.loadLayer(0);
 
