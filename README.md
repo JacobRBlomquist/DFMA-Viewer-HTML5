@@ -36,9 +36,9 @@ Once dependencies are installed, run server by running
 
 `npm start`
 
-Then navigate to _localhost:80_ or simply _localhost_ (since the server is on port 80).
+Then navigate to _localhost:3000_ or simply  (since the server is on port 3000 when not in production).
 
-If your machine's firewall allows inbound traffic on port 80, you simply need to connect to the ip address of your local machine in another computer's web browser.
+If your machine's firewall allows inbound traffic on port 3000, you simply need to connect to the ip address of your local machine in another computer's web browser.
 
 Stop the server by typing <kbd>CTRL</kbd> + <kbd>C</kbd>
 
