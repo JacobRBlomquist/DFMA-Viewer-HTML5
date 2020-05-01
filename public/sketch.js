@@ -43,13 +43,13 @@ let clickX = 0;
 let clickY = 0;
 let selectedX = 10;
 let selectedY = 10;
-let scale = 1;
+let scale = 0.25;
 let jump = 1.05;
 
 
 
 function draw() {
-    if (dfMapData.loaded&&!loading) {
+    if (dfMapData.loaded && !loading) {
         if (keyIsPressed == true && (key == "=" || key == "+" || key == "-"))
             zoom();
 
@@ -69,12 +69,12 @@ function draw() {
         background(0);
 
 
-        if (dfMapData.mapData[idx]!=undefined && dfMapData.mapData[idx].loaded === false&&!dfMapData.mapData[idx].loading) {
+        if (dfMapData.mapData[idx] != undefined && dfMapData.mapData[idx].loaded === false && !dfMapData.mapData[idx].loading) {
             loading = true;
             dfMapData.loadLayer(idx);
             return;
         }
-        if(dfMapData.mapData[idx]==undefined||dfMapData.mapData[idx].img==undefined)
+        if (dfMapData.mapData[idx] == undefined || dfMapData.mapData[idx].img == undefined)
             return;
         let img = dfMapData.mapData[idx].img;
 
@@ -88,36 +88,44 @@ function draw() {
         noFill();
         rect(imageX + selectorWidth * selectedX, imageY + selectorHeight * selectedY, selectorWidth, selectorHeight);
 
-    //       loadPixels();
- 
- 
-    //    let xT = 0, yT = 0;
-    //      let wPixels = dfMapData.tileWidth;
-    //      let hPixels = dfMapData.tileHeight;
-    //      for (let i = 0; i < dfMapData.numTiles; i++) {
- 
-    //          let cols = dfMapData.tiles[i];
-    //          for (let y = 0; y < hPixels; y++) {
-    //              for (let x = 0; x < wPixels; x++) {
-    //                  let idx = x * 4 + y * 4 * wPixels;
-    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
-    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
-    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
-    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
-    //              }
-    //          }
-    //          xT++;
-    //          if (xT >= width / wPixels) {
-    //              xT = 0;
-    //              yT++;
-    //              if (yT >= height / hPixels)
-    //                  break;
-    //          }
-    //      }
-    //      updatePixels();
+        stroke(255);
+        noFill();
+        strokeWeight(1);
+        textFont('Helvetica', 12);
+        textAlign(LEFT);
+        text("Layer: " + dfMapData.mapData[idx].depth, 20, 20);
+        //       loadPixels();
+
+
+        //    let xT = 0, yT = 0;
+        //      let wPixels = dfMapData.tileWidth;
+        //      let hPixels = dfMapData.tileHeight;
+        //      for (let i = 0; i < dfMapData.numTiles; i++) {
+
+        //          let cols = dfMapData.tiles[i];
+        //          for (let y = 0; y < hPixels; y++) {
+        //              for (let x = 0; x < wPixels; x++) {
+        //                  let idx = x * 4 + y * 4 * wPixels;
+        //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
+        //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
+        //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
+        //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
+        //              }
+        //          }
+        //          xT++;
+        //          if (xT >= width / wPixels) {
+        //              xT = 0;
+        //              yT++;
+        //              if (yT >= height / hPixels)
+        //                  break;
+        //          }
+        //      }
+        //      updatePixels();
 
     } else {
         textFont('Helvetica', 20);
+        textAlign(CENTER, CENTER);
+
         text("Loading...", width / 2, height / 2);
     }
     if (dragged) {
@@ -207,7 +215,7 @@ function fetchAndDecompressMapData(path) {
 function keyPressed() {
     if (key == "," || key == "<") {
         idx++;
-        if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers-1 }
+        if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers - 1 }
     }
     if (key == "." || key == ">") {
         idx--;

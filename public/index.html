@@ -9,17 +9,33 @@
     <script src="pako.js"></script>
     <script src="p5.js"></script>
     <script src="parser.js"></script>
-    <script  src="sketch.js"></script>
+    <script src="sketch.js"></script>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
-<h1>Extracted Tiles from: <span id="fileName"></span></h1>
-<p>Drag and Drop a <em>FDF-MAP</em> file.</p>
-<div id="p5_loading" class="loadingclass">THIS IS LOADING</div>
-<div id="canvas_container">
-    <!-- P5.js Canvas goes here -->
-</div>
-<span id="status"></span>
+    <ul>
+        <li><a href="https://blomquist.xyz" target=_blank>Home</a></li>
+        <li><a href="https://mkv25.net/dfma" target=_blank>DFMA</a></li>
+        <li><a href="https://bay12games.com/dwarves" target=_blank>Dwarf Fortress Home</a></li>
+    </ul>
+    <div class="container">
+        <h1>DFMA Map Viewer</h1>
+        
+        <p>Drag and Drop a <em>FDF-MAP</em> file to open.</p>
+        
+        
+        <div id="canvas_container">
+            <!-- P5.js Canvas goes here -->
+        </div>
+        <span id="status"></span>
+        <p>Extracted Tiles from: <span id="fileName"></span></p>
+        <hr>
+        <p>Controls:</p>
+        <p>Drag Mouse = Move Map</p>
+        <p>+/=, - z = zoom</p>
+        <p>&lt;/, &gt;/. Ascend/Descend Layers</p>
+    </div>
 </body>
 
 
