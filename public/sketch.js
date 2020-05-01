@@ -74,6 +74,8 @@ function draw() {
             dfMapData.loadLayer(idx);
             return;
         }
+        if(dfMapData.mapData[idx]==undefined||dfMapData.mapData[idx].img==undefined)
+            return;
         let img = dfMapData.mapData[idx].img;
 
         image(img, imageX, imageY, imgWidth, imgHeight);
@@ -86,33 +88,33 @@ function draw() {
         noFill();
         rect(imageX + selectorWidth * selectedX, imageY + selectorHeight * selectedY, selectorWidth, selectorHeight);
 
-        /* loadPixels();
+    //       loadPixels();
  
  
-       let xT = 0, yT = 0;
-         let wPixels = dfMapData.tileWidth;
-         let hPixels = dfMapData.tileHeight;
-         for (let i = 0; i < dfMapData.numTiles; i++) {
+    //    let xT = 0, yT = 0;
+    //      let wPixels = dfMapData.tileWidth;
+    //      let hPixels = dfMapData.tileHeight;
+    //      for (let i = 0; i < dfMapData.numTiles; i++) {
  
-             let cols = dfMapData.tiles[i];
-             for (let y = 0; y < hPixels; y++) {
-                 for (let x = 0; x < wPixels; x++) {
-                     let idx = x * 4 + y * 4 * wPixels;
-                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
-                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
-                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
-                     pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
-                 }
-             }
-             xT++;
-             if (xT >= width / wPixels) {
-                 xT = 0;
-                 yT++;
-                 if (yT >= height / hPixels)
-                     break;
-             }
-         }
-         updatePixels();*/
+    //          let cols = dfMapData.tiles[i];
+    //          for (let y = 0; y < hPixels; y++) {
+    //              for (let x = 0; x < wPixels; x++) {
+    //                  let idx = x * 4 + y * 4 * wPixels;
+    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4] = cols[idx];
+    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 1] = cols[idx + 1];
+    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 2] = cols[idx + 2];
+    //                  pixels[(xT * wPixels * 4) + x * 4 + (y + yT * hPixels) * width * 4 + 3] = cols[idx + 3];
+    //              }
+    //          }
+    //          xT++;
+    //          if (xT >= width / wPixels) {
+    //              xT = 0;
+    //              yT++;
+    //              if (yT >= height / hPixels)
+    //                  break;
+    //          }
+    //      }
+    //      updatePixels();
 
     } else {
         textFont('Helvetica', 20);

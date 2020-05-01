@@ -33,9 +33,10 @@ function mapData() {
         curLayer.loadPixels();
 
 
-        for (let y = 0; y < imgTHeight; y++) {
-            let yTileIndex = y * this.tileHeight;
-            for (let x = 0; x < imgTWidth; x++) {
+        //blit whole pix
+        for (let x = 0; x < imgTWidth; x++) {
+            for (let y = 0; y < imgTHeight; y++) {
+                let yTileIndex = y * this.tileHeight;
                 let xTileIndex = x * this.tileWidth;
                 let curIndex;
                 if (this.numTiles <= 127) {
@@ -50,11 +51,16 @@ function mapData() {
 
                 let curTile = this.tiles[curIndex];
 
-                //blit
-                for (let ty = 0; ty < this.tileHeight; ty++) {
-                    for (let tx = 0; tx < this.tileWidth; tx++) {
-                        let srcIdx = ty * 4 + tx * 4 * this.tileWidth;
-                        curLayer.set(yTileIndex + ty, xTileIndex + tx, color(curTile[srcIdx], curTile[srcIdx + 1], curTile[srcIdx + 2]))
+                for (let tx = 0; tx < this.tileWidth; tx++) {
+                    for (let ty = 0; ty < this.tileHeight; ty++) {
+                        let srcIdx = tx * 4 + ty * 4 * this.tileWidth;
+                        let destIdx = ((xTileIndex + tx) * 4) + ((yTileIndex + ty) * 4 * imgWidth);
+                        curLayer.pixels[destIdx] = curTile[srcIdx];
+                        curLayer.pixels[destIdx + 1] = curTile[srcIdx + 1];
+                        curLayer.pixels[destIdx + 2] = curTile[srcIdx + 2];
+                        curLayer.pixels[destIdx + 3] = curTile[srcIdx + 3];
+
+                        // curLayer.set(xTileIndex + tx, yTileIndex + ty, color(curTile[srcIdx], curTile[srcIdx + 1], curTile[srcIdx + 2]))
                     }
                 }
 
@@ -149,7 +155,8 @@ function mapData() {
 
 
 
-        this.loadLayer(0);
+        // for(let i = 0;i<this.numLayers;i++)
+        //     this.loadLayer(i);
 
         // let size = 30;
         // let h = ceil(this.numTiles / size);
