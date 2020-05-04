@@ -4,16 +4,18 @@ let dfMapData = new mapData();
 let origPixDensity = 1;
 let idx = 0;
 let loading = true;
+let sorted = false;
 
 function preload() {
     let fName = "file.fdf-map";
     document.getElementById('fileName').innerText = fName;
 
-    fetchAndDecompressMapData(fName).then((e) => {
-        loading = true;
-        dfMapData.parse(e);
-        loading = false;
-    });
+    Promise.resolve().then(() => {
+        fetchAndDecompressMapData(fName).then((e) => {
+            loading = true;
+            dfMapData.parse(e);
+        });
+    })
 
 }
 
@@ -49,6 +51,26 @@ let jump = 1.05;
 
 
 function draw() {
+    //check loaded
+    loading = false;
+
+    for (let i = 0; i < dfMapData.mapData.length; i++) {
+        if (!dfMapData.mapData[i].loaded) {
+            loading = true;
+            break;
+        }
+    }
+
+    if (!loading && !sorted) {
+        dfMapData.mapData.sort((a, b) => {//sort by layer
+            return a.depth - b.depth;
+        });
+
+    }
+
+
+
+
     if (dfMapData.loaded && !loading) {
         if (keyIsPressed == true && (key == "=" || key == "+" || key == "-"))
             zoom();
@@ -122,19 +144,22 @@ function draw() {
         //      }
         //      updatePixels();
 
+        if (dragged) {
+            fill(0, 0, 0, 200);
+            textFont('Helvetica', 30);
+            textAlign(CENTER, CENTER);
+            rect(0, 0, width, height);
+            fill(255);
+            text("DROP FDF-MAP FILE HERE", width / 2, height / 2);
+        }
     } else {
+        background(0);
         textFont('Helvetica', 20);
         textAlign(CENTER, CENTER);
+        stroke(255);
+        fill(255);
 
         text("Loading...", width / 2, height / 2);
-    }
-    if (dragged) {
-        fill(0, 0, 0, 200);
-        textFont('Helvetica', 30);
-        textAlign(CENTER, CENTER);
-        rect(0, 0, width, height);
-        fill(255);
-        text("DROP FDF-MAP FILE HERE", width / 2, height / 2);
     }
 
 }
@@ -252,6 +277,7 @@ function fileDropCB(file) {
         let res = new DataView(data.buffer);
         // bytes = new DataView(data.buffer);
         dfMapData = new mapData();
+        resetProgress();
         dfMapData.parse(res);
     }
 

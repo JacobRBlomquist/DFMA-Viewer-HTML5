@@ -10,8 +10,10 @@
     <title>Document</title>
     <script src="pako.js"></script>
     <script src="p5.js"></script>
+    <script src="site.js"></script>
     <script src="parser.js"></script>
     <script src="sketch.js"></script>
+
 
 </head>
 
@@ -26,7 +28,9 @@
 
         <p>Drag and Drop an <em>FDF-MAP</em> file to open.</p>
 
-
+        <div id="progressBar">
+            <span style="width:0%;" id="progressInside"></span>
+        </div>
         <div id="canvas_container">
             <!-- P5.js Canvas goes here -->
         </div>
@@ -41,23 +45,88 @@
                 </ul>
             </li>
             <li>Zoom<ul>
-                <li>
-                    Zoom out: <kbd>-</kbd>
-                </li>
-                <li>Zoom in: <kbd>+</kbd> or <kbd>=</kbd></li>
+                    <li>
+                        Zoom out: <kbd>-</kbd>
+                    </li>
+                    <li>Zoom in: <kbd>+</kbd> or <kbd>=</kbd></li>
                 </ul>
             </li>
             <li>Change Layer <ul>
-                <li>Up: <kbd>&lt;</kbd> or <kbd>,</kbd></li>
-                <li>Down: <kbd>&gt;</kbd> or <kbd>.</kbd></li>
-            </ul></li>
+                    <li>Up: <kbd>&lt;</kbd> or <kbd>,</kbd></li>
+                    <li>Down: <kbd>&gt;</kbd> or <kbd>.</kbd></li>
+                </ul>
+            </li>
         </ul>
         <hr>
         <h3>About:</h3>
-        <p>This viewer was created using <a href="https://www.p5js.org" target="_blank">P5.js</a>. The parser for the FDF-MAP files is written
-        in pure ES6 javascript.</p>
+        <p>This viewer was created using <a href="https://www.p5js.org" target="_blank">P5.js</a>. The parser for the
+            FDF-MAP files is written
+            in pure ES6 javascript.</p>
         <a href="https://github.com/JacobRBlomquist/DFMA-Viewer-HTML5" target="_blank">View Code</a>
-        <footer><p>&copy; 2020 Jacob Blomquist</p><p>Licensed Under MIT</p></footer>
+        <hr>
+        <h3>Changelog</h3>
+        <ul>
+            <li>
+                <strong>TODO</strong>
+                <ul>
+                    <li>Cursor Movement / Selection of particular tile.</li>
+                    <li>Movement with arrow keys / 2, 4, 6, 8 keys.</li>
+                    <li>Side / Front View (as in flash version)</li>
+                    <li>UI Controls (Mostly for mobile)</li>
+                </ul>
+            </li>
+            <li>
+                4 May 2020
+                <ul>
+                    <li>
+                        Fixed small hang when initially loading map. (Entire DOM was freezing when parsing individual
+                        layers.)
+                        <ul>
+                            <li>Javascript Promises were used to make this async so that DOM updates could occur.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Added progress bar when parsing.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                1 May 2020
+                <ul>
+                    <li>Fixed slow parsing. Manually manipulated each color channel (RGBA) of the image. MUCH faster.
+                    </li>
+                    <li>Contacted Markavian with initial product.</li>
+                </ul>
+            </li>
+            <li>
+                30 April 2020
+                <ul>
+                    <li>
+                        Implemented map parsing fully.
+                    </li>
+                    <li>Smooth zooming</li>
+                    <li>
+                        Parsing is SUPER SLOW! Most likely due to using P5.Image's 'set' function.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                29 April 2020
+                <ul>
+                    <li>
+                        Initial Commit.
+                    </li>
+                    <li>
+                        Basic Tile Viewing. (This version just gets a map and displays its tiles.)
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <footer>
+            <p>&copy; 2020 Jacob Blomquist</p>
+            <p>Licensed Under MIT</p>
+        </footer>
     </div>
 </body>
 

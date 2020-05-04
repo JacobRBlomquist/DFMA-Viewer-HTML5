@@ -12,22 +12,22 @@ function mapData() {
     this.ptr = 0;
     this.data = undefined;
 
-    this.loadLayer = function (idx) {
+    this.loadLayer = function (ob, idx) {
         console.log("loading " + idx);
         loading = true;
 
 
 
-        if (this.mapData[idx].loaded)
+        if (ob.mapData[idx].loaded)
             return;
 
-        this.mapData[idx].loading = true;
-        let curMapData = this.mapData[idx];
+            ob.mapData[idx].loading = true;
+        let curMapData = ob.mapData[idx];
         let imgTWidth = curMapData.width;
         let imgTHeight = curMapData.height;
 
-        let imgWidth = imgTWidth * this.tileWidth;
-        let imgHeight = imgTHeight * this.tileHeight;
+        let imgWidth = imgTWidth * ob.tileWidth;
+        let imgHeight = imgTHeight * ob.tileHeight;
 
         let curLayer = createImage(imgWidth, imgHeight);
         curLayer.loadPixels();
@@ -36,24 +36,24 @@ function mapData() {
         //blit whole pix
         for (let x = 0; x < imgTWidth; x++) {
             for (let y = 0; y < imgTHeight; y++) {
-                let yTileIndex = y * this.tileHeight;
-                let xTileIndex = x * this.tileWidth;
+                let yTileIndex = y * ob.tileHeight;
+                let xTileIndex = x * ob.tileWidth;
                 let curIndex;
-                if (this.numTiles <= 127) {
-                    curIndex = this.data.getUint8(this.ptr++, true);
-                } else if (this.numTiles <= 32767) {
-                    curIndex = this.data.getUint16(this.ptr, true);
-                    this.ptr += 2;
+                if (ob.numTiles <= 127) {
+                    curIndex = ob.data.getUint8(ob.ptr++, true);
+                } else if (ob.numTiles <= 32767) {
+                    curIndex = ob.data.getUint16(ob.ptr, true);
+                    ob.ptr += 2;
                 } else {
-                    curIndex = this.data.getUint32(this.ptr, true);
-                    this.ptr += 4;
+                    curIndex = ob.data.getUint32(ob.ptr, true);
+                    ob.ptr += 4;
                 }
 
-                let curTile = this.tiles[curIndex];
+                let curTile = ob.tiles[curIndex];
 
-                for (let tx = 0; tx < this.tileWidth; tx++) {
-                    for (let ty = 0; ty < this.tileHeight; ty++) {
-                        let srcIdx = tx * 4 + ty * 4 * this.tileWidth;
+                for (let tx = 0; tx < ob.tileWidth; tx++) {
+                    for (let ty = 0; ty < ob.tileHeight; ty++) {
+                        let srcIdx = tx * 4 + ty * 4 * ob.tileWidth;
                         let destIdx = ((xTileIndex + tx) * 4) + ((yTileIndex + ty) * 4 * imgWidth);
                         curLayer.pixels[destIdx] = curTile[srcIdx];
                         curLayer.pixels[destIdx + 1] = curTile[srcIdx + 1];
@@ -71,11 +71,12 @@ function mapData() {
 
 
 
-        this.mapData[idx].loaded = true;
-        this.mapData[idx].img = curLayer;
+        ob.mapData[idx].loaded = true;
+        ob.mapData[idx].img = curLayer;
         loading = false;
-        this.mapData[idx].loading = false;
-        console.log("done loading " + idx);
+        ob.mapData[idx].loading = false;
+        // console.log("done loading " + idx);
+        addProgress(ceil(1.0 / ob.numLayers*100));
     }
 
     this.parse = function (data) {
@@ -155,8 +156,14 @@ function mapData() {
 
 
 
-        // for(let i = 0;i<this.numLayers;i++)
-        //     this.loadLayer(i);
+        for (let i = 0; i < this.numLayers; i++) {
+            setTimeout(this.loadLayer,0,this, i);
+            //this.loadLayer(i);
+        }
+
+     
+
+
 
         // let size = 30;
         // let h = ceil(this.numTiles / size);
