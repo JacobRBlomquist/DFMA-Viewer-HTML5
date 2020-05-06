@@ -78,7 +78,7 @@ function draw() {
             originalImgHeight = dfMapData.mapData[0].height * dfMapData.tileHeight;
             imgWidth = originalImgWidth * scale;
             imgHeight = originalImgHeight * scale;
-            return;
+            // return;
         }
 
 
