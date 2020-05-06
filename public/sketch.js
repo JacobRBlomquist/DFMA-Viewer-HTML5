@@ -168,16 +168,16 @@ function zoom() {
 
     if (key == '=' || key == '+') {
         scale *= jump;
-        if (scale > 6)
-            scale = 6;
+        if (scale > 10)
+            scale = 20;
 
         zoomed = true;
     }
 
     if (key == "-") {
         scale /= jump;
-        if (scale < 0.15)
-            scale = 0.15;
+        if (scale < 0.01)
+            scale = 0.01;
 
         zoomed = true;
     }
@@ -196,6 +196,7 @@ function zoom() {
 
         imageX = width / 2 - imgWidth * ratioX;
         imageY = height / 2 - imgHeight * ratioY;
+        originalImgWidth=0;
     }
 }
 
