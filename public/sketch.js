@@ -168,7 +168,7 @@ function zoom() {
 
     if (key == '=' || key == '+') {
         scale *= jump;
-        if (scale > 10)
+        if (scale > 20)
             scale = 20;
 
         zoomed = true;
