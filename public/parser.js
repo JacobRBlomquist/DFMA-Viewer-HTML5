@@ -198,3 +198,71 @@ function mapData() {
         this.loaded = true;
     }
 }
+
+
+/**
+ * Uses Es6 Fetch to get a file at the given path
+ * 
+ * path - path to file (relative to root or absolute)
+ */
+async function fetchAndDecompressMapData(path) {
+
+    // await fetch(path, { method: 'GET', headers: { 'Origin': 'https://mkv25.net' } })
+    //     .then((res) => {
+    //         return res.arrayBuffer()
+    //     })
+    //     .then((a) => {
+    //         let arr = new Uint8Array(a);
+    //         //inflate data
+    //         let data = pako.inflate(arr);
+    //         let res = new DataView(data.buffer);
+    //         // bytes = new DataView(data.buffer);
+    //         return res;
+    //     });
+
+    let res =
+        await fetch(path, { method: 'GET', headers: { 'Origin': 'https://mkv25.net' } })
+    let ab = await res.arrayBuffer();
+
+
+    let arr = new Uint8Array(ab);
+    //inflate data
+    let data = pako.inflate(arr);
+    let ret = new DataView(data.buffer);
+    // bytes = new DataView(data.buffer);
+    return ret;
+}
+
+/**
+ * Fetches and parses a data file from a specific network path
+ * 
+ * This only parses the data, it does NOT populate the image files.
+ * These are generated and cached on-the-fly.
+ * See the function above "mapData.getLayer"
+ * 
+ * NOTE: Due to CORS the desired file must be under the same origin.
+ * path - path to data file
+ * 
+ * returns: a mapData object that's ready to have its layers queried with 'mapData.getLayer();
+ */
+async function loadFromURL(path) {
+
+    let md = new mapData();
+    try {
+        let loadedData;
+        loadedData = await fetchAndDecompressMapData(path)
+        md.parse(loadedData);
+        
+    } catch (err) {
+        console.error(err);
+    }
+    
+    return md;
+}
+
+if (typeof module !== 'undefined') {
+    module.exports = {
+        mapData,
+        loadFromURL,
+    }
+}

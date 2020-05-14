@@ -1,6 +1,6 @@
 "use strict";
 
-let dfMapData = new mapData();
+let dfMapData;
 let origPixDensity = 1;
 let idx = 0;
 
@@ -14,17 +14,9 @@ function preload() {
     document.getElementById('fileName').innerText = fName;
 
     //fetch local file
-    Promise.resolve().then(() => {
-        fetchAndDecompressMapData(fName).then((e) => {
-            // loading = true;
-            dfMapData.parse(e);
-        }).catch(err => { console.error(err); }
-
-        );
-
-        ;
-    })
-
+    dfMapData= loadFromURL(fName).then(e=>{
+        dfMapData = e;
+    });
 }
 
 /**
@@ -226,27 +218,6 @@ function mouseDragged() {
 }
 
 
-/**
- * Uses Es6 Fetch to get a file at the given path
- * 
- * path - path to file (relative to root or absolute)
- */
-function fetchAndDecompressMapData(path) {
-
-
-    return fetch(path, {method:'GET' ,headers:{'Origin':'https://mkv25.net'}})
-        .then((res) => {
-            return res.arrayBuffer()
-        })
-        .then((a) => {
-            let arr = new Uint8Array(a);
-            //inflate data
-            let data = pako.inflate(arr);
-            let res = new DataView(data.buffer);
-            // bytes = new DataView(data.buffer);
-            return res;
-        });
-}
 
 /**
  * P5 KeyPressed function
@@ -310,3 +281,17 @@ function fileDropCB(file) {
     document.getElementById('fileName').innerText = file.name;
 }
 
+if(typeof module !== 'undefined')
+{
+    module.exports={
+        fileDropCB,
+        fileHoverLeaveCB,
+        keyPressed,
+        mouseDragged,
+        mousePressed,
+        zoom,
+        draw,
+        setup,
+        preload
+    }
+}
