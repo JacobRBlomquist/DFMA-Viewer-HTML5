@@ -13,6 +13,8 @@ function MapData () {
   this.numTiles = 0
   this.tileWidth = 0
   this.tileHeight = 0
+  this.numTilesX = 0
+  this.numTilesY = 0
   this.numLayers = 0
   this.tiles = []
   this.mapData = []
@@ -29,7 +31,7 @@ function MapData () {
     if (mData.loaded) {
       return mData.img
     } else {
-      this.loadLayer(this, idx)
+      this.loadLayer(idx)
       return this.mapData[idx].img
     }
   }
@@ -51,6 +53,8 @@ function MapData () {
     const curMapData = this.mapData[idx]
     const imgTWidth = curMapData.width
     const imgTHeight = curMapData.height
+    this.numTilesX = imgTWidth;
+    this.numTilesY = imgTHeight;
 
     const imgWidth = imgTWidth * this.tileWidth
     const imgHeight = imgTHeight * this.tileHeight
