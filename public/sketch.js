@@ -8,7 +8,7 @@ let idx = 0
  *
  * Occurs once before setup.
  */
-function preload() {
+function preload () {
   const fName = 'file.fdf-map'
   document.getElementById('fileName').innerText = fName
 
@@ -23,7 +23,7 @@ function preload() {
  *
  * Occurs once before main loop
  */
-function setup() {
+function setup () {
   const canvas = window.createCanvas(800, 600)
   canvas.parent('canvas_container')
   canvas.dragOver(fileHoverCB)
@@ -54,7 +54,7 @@ const jump = 1.05
  *
  * Occurs each frame
  */
-function draw() {
+function draw () {
   if (dfMapData.loaded) {
     if (window.keyIsPressed === true && (window.key === '=' || window.key === '+' || window.key === '-')) { zoom() }
 
@@ -67,7 +67,7 @@ function draw() {
       // return;
     }
 
-    window.background(0);//Make background black
+    window.background(0)// Make background black
 
     if (dfMapData.mapData[idx] !== undefined && dfMapData.mapData[idx].loaded === false && !dfMapData.mapData[idx].loading) {
       dfMapData.getLayer(idx)
@@ -80,25 +80,23 @@ function draw() {
     const selectorWidth = dfMapData.tileWidth * scale
     const selectorHeight = dfMapData.tileHeight * scale
 
-    //draw selector
+    // draw selector
     const curCenterX = window.width / 2 - imageX
     const curCenterY = window.height / 2 - imageY
-    const selectedX = floor(curCenterX / (dfMapData.tileWidth * scale));
-    const selectedY = floor(curCenterY / (dfMapData.tileHeight * scale));
-
+    const selectedX = window.floor(curCenterX / (dfMapData.tileWidth * scale))
+    const selectedY = window.floor(curCenterY / (dfMapData.tileHeight * scale))
 
     window.stroke(255, 0, 0)
-    window.strokeWeight(max(scale, 2));
+    window.strokeWeight(window.max(scale, 2))
     window.noFill()
     window.rect(imageX + selectorWidth * selectedX, imageY + selectorHeight * selectedY, selectorWidth, selectorHeight)
-    window.stroke(255, 255, 0);
-    let crosshairSize = 5;
-    strokeWeight(2);
-    window.line(width / 2 - crosshairSize, height / 2, width / 2 + crosshairSize, height / 2);
-    window.line(width / 2, height / 2 - crosshairSize, width / 2, height / 2 + crosshairSize);
+    window.stroke(255, 255, 0)
+    const crosshairSize = 5
+    window.strokeWeight(2)
+    window.line(window.width / 2 - crosshairSize, window.height / 2, window.width / 2 + crosshairSize, window.height / 2)
+    window.line(window.width / 2, window.height / 2 - crosshairSize, window.width / 2, window.height / 2 + crosshairSize)
 
-
-    //text
+    // text
     window.stroke(255)
     window.noFill()
     window.strokeWeight(1)
@@ -155,7 +153,7 @@ function draw() {
 /**
  * Called whenever a 'zoom' key is pressed.
  */
-function zoom() {
+function zoom () {
   let zoomed = false
   // ZOOM
 
@@ -197,25 +195,24 @@ function zoom() {
  * xTile - xTile to zoom to
  * yTile - yTile to zoom to
  */
-function zoomTo(layer, pscale, xTile, yTile) {
-  //find the desired layer
-  let found = false;
-  let curLayer;
+function zoomTo (layer, pscale, xTile, yTile) {
+  // find the desired layer
+  let found = false
+  let curLayer
   for (let i = 0; i < dfMapData.mapData.length; i++) {
-    curLayer = dfMapData.mapData[i];
+    curLayer = dfMapData.mapData[i]
     if (curLayer.depth === layer) {
-      found = true;
-      break;
+      found = true
+      break
     }
   }
 
-  if (!found)
-    return;
+  if (!found) { return }
 
-  idx = curLayer.index;
-  scale = pscale;
-  const curCenterX = xTile * scale * dfMapData.tileWidth- imageX;
-  const curCenterY = yTile * scale * dfMapData.tileHeight-imageY;
+  idx = curLayer.index
+  scale = pscale
+  const curCenterX = (xTile * dfMapData.tileWidth * scale) + imageX
+  const curCenterY = (yTile * dfMapData.tileHeight * scale) + imageY
 
   const ratioX = curCenterX / imgWidth
   const ratioY = curCenterY / imgHeight
@@ -233,7 +230,7 @@ function zoomTo(layer, pscale, xTile, yTile) {
  *
  * Called whenever the mouse is pressed
  */
-function mousePressed() {
+function mousePressed () {
   clickX = window.mouseX
   clickY = window.mouseY
 }
@@ -243,7 +240,7 @@ function mousePressed() {
  *
  * Called whenever the mouse is dragged
  */
-function mouseDragged() {
+function mouseDragged () {
   const xDif = (window.mouseX - clickX)
   const yDif = (window.mouseY - clickY)
   clickX = window.mouseX
@@ -257,7 +254,7 @@ function mouseDragged() {
  *
  * called whenever a key is pressed
  */
-function keyPressed() {
+function keyPressed () {
   if (window.key === ',' || window.key === '<') {
     idx++
     if (idx >= dfMapData.numLayers) { idx = dfMapData.numLayers - 1 }
@@ -271,21 +268,21 @@ function keyPressed() {
 /**
  * Callback for when a hover event occurs
  */
-function fileHoverCB() {
+function fileHoverCB () {
   dragged = true
 }
 
 /**
  * Call back for when a hover event leaves canvas
  */
-function fileHoverLeaveCB() {
+function fileHoverLeaveCB () {
   dragged = false
 }
 
 /**
  * Callback for when a file drop event occurs
  */
-function fileDropCB(file) {
+function fileDropCB (file) {
   if (!file.name.endsWith('fdf-map')) {
     window.alert("Invalid File Format! You must submit an 'fdf-map' file!")
   }

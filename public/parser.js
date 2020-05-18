@@ -53,8 +53,8 @@ function MapData () {
     const curMapData = this.mapData[idx]
     const imgTWidth = curMapData.width
     const imgTHeight = curMapData.height
-    this.numTilesX = imgTWidth;
-    this.numTilesY = imgTHeight;
+    this.numTilesX = imgTWidth
+    this.numTilesY = imgTHeight
 
     const imgWidth = imgTWidth * this.tileWidth
     const imgHeight = imgTHeight * this.tileHeight
