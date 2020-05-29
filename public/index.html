@@ -40,6 +40,8 @@
             <li>Move Map
                 <ul>
                     <li>Click and Drag</li>
+                    <li>Use the <kbd>8</kbd><kbd>6</kbd><kbd>4</kbd><kbd>2</kbd> keys to move one tile at a time.</li>
+                    <li>Hold the <kbd>z</kbd> key to move by 10 tiles at a time <br>(Shift doesn't work due to the DOM wanting to scroll the entire window when holding shift)</li>
                 </ul>
             </li>
             <li>Zoom<ul>
@@ -67,10 +69,30 @@
             <li>
                 <strong>TODO</strong>
                 <ul>
-                    <li>Cursor Movement / Selection of particular tile.</li>
-                    <li>Movement with arrow keys / 2, 4, 6, 8 keys.</li>
                     <li>Side / Front View (as in flash version)</li>
                     <li>UI Controls (Mostly for mobile)</li>
+                    <li>Repeating input when holding down movement keys (utilize acceleration so it doesn't happen instantly and
+                        slowly speeds up.)
+                    </li>
+                </ul>
+            </li>
+            <li>
+                29 May 2020
+                <ul>
+                    <li>
+                        Implemented an internal "ZoomTo" function. The function takes the following parameters:
+                        <ul>
+                            <li>layer - layer to zoom to (i.e. layer 76)</li>
+                            <li>scale - zoom level (same as page zoom level)</li>
+                            <li>xTile - x Coordinate of tile to zoom to (Starts at 0)</li>
+                            <li>yTile - y Coordinate of tile to zoom to (starts at 0)</li>
+                        </ul>
+                        If an invalid layer is given, nothing happens.
+                    </li>
+                    <li>
+                        Added keyboard only movement. The numpad <kbd>8,6,4,2</kbd> keys will move one tile at a time. And holding the <kbd>z</kbd>
+                        key will make the movement with the numpad move by 10 each press.
+                    </li>
                 </ul>
             </li>
             <li>
