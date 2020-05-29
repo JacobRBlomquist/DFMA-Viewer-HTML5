@@ -211,18 +211,12 @@ function zoomTo (layer, pscale, xTile, yTile) {
 
   idx = curLayer.index
   scale = pscale
-  const curCenterX = (xTile * dfMapData.tileWidth * scale) + imageX
-  const curCenterY = (yTile * dfMapData.tileHeight * scale) + imageY
-
-  const ratioX = curCenterX / imgWidth
-  const ratioY = curCenterY / imgHeight
 
   imgWidth = originalImgWidth * scale
   imgHeight = originalImgHeight * scale
 
-  imageX = window.width / 2 - imgWidth * ratioX
-  imageY = window.height / 2 - imgHeight * ratioY
-  originalImgWidth = 0
+  imageX = window.width / 2 - dfMapData.tileWidth * scale * xTile + dfMapData.tileWidth / 2 * scale
+  imageY = window.height / 2 - dfMapData.tileHeight * scale * yTile + dfMapData.tileHeight / 2 * scale
 }
 
 /**
@@ -248,7 +242,6 @@ function mouseDragged () {
   imageX += xDif
   imageY += yDif
 }
-
 /**
  * P5 KeyPressed function
  *
@@ -262,6 +255,25 @@ function keyPressed () {
   if (window.key === '.' || window.key === '>') {
     idx--
     if (idx < 0) { idx = 0 }
+  }
+
+  let modifier = 1
+
+  if (window.keyIsDown(90)) { //  'z'
+    modifier = 10
+  }
+
+  if (window.keyIsDown(102)) { // number 6
+    imageX -= dfMapData.tileWidth * scale * modifier
+  }
+  if (window.keyIsDown(100)) { // number 4
+    imageX += dfMapData.tileWidth * scale * modifier
+  }
+  if (window.keyIsDown(98)) { // number 2
+    imageY -= dfMapData.tileHeight * scale * modifier
+  }
+  if (window.keyIsDown(104)) { // number 8
+    imageY += dfMapData.tileHeight * scale * modifier
   }
 }
 
@@ -316,6 +328,7 @@ if (typeof module !== 'undefined') {
     zoom,
     draw,
     setup,
-    preload
+    preload,
+    zoomTo
   }
 }
