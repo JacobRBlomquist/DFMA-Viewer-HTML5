@@ -1,4 +1,6 @@
-# DFMA Modern Viewer
+# DEPRECATED: Continued Development Here: [DFMA Map Archive Repository](https://github.com/df-map-archive/dfma-html5-map-viewer)
+
+## DFMA Modern Viewer
 
 View it live at [blomquist.xyz/dfma](https://blomquist.xyz/dfma)
 
